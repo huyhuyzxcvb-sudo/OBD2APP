@@ -1,0 +1,154 @@
+Launching lib\main.dart on SM G610F in debug mode...
+Running Gradle task 'assembleDebug'...                              4.9s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...          10.8s
+D/FlutterJNI(17447): Beginning load of flutter...
+D/FlutterJNI(17447): flutter (null) was loaded normally!
+I/flutter (17447): [IMPORTANT:flutter/shell/common/shell.cc(528)] [Action Required]: Impeller opt-out deprecated.
+I/flutter (17447):     The application opted out of Impeller by either using the
+I/flutter (17447):     `--no-enable-impeller` flag or the
+I/flutter (17447):     `io.flutter.embedding.android.EnableImpeller` `AndroidManifest.xml` entry.
+I/flutter (17447):     These options are going to go away in an upcoming Flutter release. Remove
+I/flutter (17447):     the explicit opt-out. If you need to opt-out, please report a bug describing
+I/flutter (17447):     the issue.
+I/flutter (17447): 
+I/flutter (17447):     https://github.com/flutter/flutter/issues/new?template=02_bug.yml
+I/flutter (17447): 
+V/FlutterBluetoothSerial(17447): Attached to engine
+D/FlutterRenderer(17447): Width is zero. 0,0
+Syncing files to device SM G610F...                                 84ms
+
+Flutter run key commands.
+r Hot reload. 
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+A Dart VM Service on SM G610F is available at: http://127.0.0.1:58754/GyinMBxcWME=/
+The Flutter DevTools debugger and profiler on SM G610F is available at: http://127.0.0.1:58754/GyinMBxcWME=/devtools/?uri=ws://127.0.0.1:58754/GyinMBxcWME=/ws
+
+Performing hot reload...                                        
+I/flutter (17447): supabase.supabase_flutter: INFO: ***** Supabase init completed ***** 
+I/Choreographer(17447): Skipped 257 frames!  The application may be doing too much work on its main thread.
+D/SurfaceView(17447): onWindowVisibilityChanged(0) true dd12693 of ViewRootImpl@7ffa39c[MainActivity]
+D/ViewRootImpl@7ffa39c[MainActivity](17447): dispatchAttachedToWindow
+D/FlutterRenderer(17447): Width is zero. 0,0
+V/Surface (17447): sf_framedrop debug : 0x4f4c, game : false, logging : 0
+D/ViewRootImpl@7ffa39c[MainActivity](17447): Relayout returned: old=[0,0][0,0] new=[0,0][1080,1920] result=0x7 surface={valid=true 3194812416} changed=true
+I/OpenGLRenderer(17447): Initialized EGL, version 1.4
+D/OpenGLRenderer(17447): Swap behavior 2
+D/FlutterJNI(17447): Sending viewport metrics to the engine.
+D/libGLESv1(17447): STS_GLApi : DTS, ODTC are not allowed for Package : com.example.obd2_final
+D/mali_winsys(17447): EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, egl_color_buffer_format *, EGLBoolean) returns 0x3000,  [1080x1920]-format:1
+D/OpenGLRenderer(17447): eglCreateWindowSurface = 0xdca8b328, 0xbe6cf808
+D/SurfaceView(17447): BG show() Surface(name=Background for - SurfaceView - com.example.obd2_final/com.example.obd2_final.MainActivity@dd12693@0) io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ......ID 0,0-1080,1920}
+V/Surface (17447): sf_framedrop debug : 0x4f4c, game : false, logging : 0
+D/SurfaceView(17447): surfaceCreated 1 #8 io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ......ID 0,0-1080,1920}
+D/mali_winsys(17447): EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, egl_color_buffer_format *, EGLBoolean) returns 0x3000,  [1080x1920]-format:1
+D/SurfaceView(17447): surfaceChanged (1080,1920) 1 #8 io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ......ID 0,0-1080,1920}
+D/SurfaceView(17447): windowStopped(true) false dd12693 of ViewRootImpl@7ffa39c[MainActivity]
+D/SurfaceView(17447): BG show() Surface(name=Background for - SurfaceView - com.example.obd2_final/com.example.obd2_final.MainActivity@dd12693@0) io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ......ID 0,0-1080,1920}
+D/SurfaceView(17447): surfaceDestroyed 1 #1 io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ......ID 0,0-1080,1920}
+I/flutter (17447): [38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────[0m
+I/flutter (17447): [38;5;12m│ #0   AppLogger.i (package:obd2_diagnostics/core/utils/app_logger.dart:23:52)[0m
+I/flutter (17447): [38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+I/flutter (17447): [38;5;12m│ 💡 SQLite path: /data/user/0/com.example.obd2_final/databases/obd2_data.db[0m
+I/flutter (17447): [38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────[0m
+I/Choreographer(17447): Skipped 33 frames!  The application may be doing too much work on its main thread.
+Reloaded 0 libraries in 740ms (compile: 19 ms, reload: 0 ms, reassemble: 331 ms).
+D/SurfaceView(17447): onWindowVisibilityChanged(4) false dd12693 of ViewRootImpl@7ffa39c[MainActivity]
+D/SurfaceView(17447): BG hide() Surface(name=Background for - SurfaceView - com.example.obd2_final/com.example.obd2_final.MainActivity@dd12693@0) true false io.flutter.embedding.android.FlutterSurfaceView{dd12693 G.E...... ......ID 0,0-1080,1920}
+D/OpenGLRenderer(17447): eglDestroySurface = 0xdca8b328, 0xbe6cf800
+I/zygote  (17447): Do partial code cache collection, code=20KB, data=30KB
+I/zygote  (17447): After code cache collection, code=20KB, data=30KB
+I/zygote  (17447): Increasing code cache capacity to 128KB
+D/ViewRootImpl@7ffa39c[MainActivity](17447): Relayout returned: old=[0,0][1080,1920] new=[0,0][1080,1920] result=0x5 surface={valid=false 0} changed=true
+I/flutter (17447): [38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────[0m
+I/flutter (17447): [38;5;12m│ #0   AppLogger.i (package:obd2_diagnostics/core/utils/app_logger.dart:23:52)[0m
+I/flutter (17447): [38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+I/flutter (17447): [38;5;12m│ 💡 SQLite initialized √[0m
+I/flutter (17447): [38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────[0m
+I/flutter (17447): [38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────[0m
+I/flutter (17447): [38;5;12m│ #0   AppLogger.i (package:obd2_diagnostics/core/utils/app_logger.dart:23:52)[0m
+I/flutter (17447): [38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+I/flutter (17447): [38;5;12m│ 💡 [SyncService] SyncService started[0m
+I/flutter (17447): [38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────[0m
+I/Choreographer(17447): Skipped 341 frames!  The application may be doing too much work on its main thread.
+D/SurfaceView(17447): onWindowVisibilityChanged(8) false dd12693 of ViewRootImpl@7ffa39c[MainActivity]
+D/ViewRootImpl@7ffa39c[MainActivity](17447): Relayout returned: old=[0,0][1080,1920] new=[0,0][1080,1920] result=0x1 surface={valid=false 0} changed=false
+I/flutter (17447): Total: 10
+I/flutter (17447): By day: {26/5: 10}
+I/flutter (17447): RPM null: 0/10
+I/flutter (17447): First: 2026-05-26 13:23:04.614
+I/flutter (17447): Last:  2026-05-26 13:32:06.144
+D/FlutterJNI(17447): Sending viewport metrics to the engine.
+D/ProfileInstaller(17447): Installing profile for com.example.obd2_final
+I/flutter (17447): ┌───────────────────────────────────────────────────────────────────────────────────────────────────
+I/flutter (17447): │ #0   AppLogger.d (package:obd2_diagnostics/core/utils/app_logger.dart:22:52)
+I/flutter (17447): ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+I/flutter (17447): │ 🐛 [SyncService] No pending records to sync
+I/flutter (17447): └───────────────────────────────────────────────────────────────────────────────────────────────────
+D/ViewRootImpl@7ffa39c[MainActivity](17447): Relayout returned: old=[0,0][1080,1920] new=[0,0][1080,1920] result=0x1 surface={valid=false 0} changed=false
+D/SurfaceView(17447): onWindowVisibilityChanged(4) false dd12693 of ViewRootImpl@7ffa39c[MainActivity]
+D/ViewRootImpl@7ffa39c[MainActivity](17447): Relayout returned: old=[0,0][1080,1920] new=[0,0][1080,1920] result=0x1 surface={valid=false 0} changed=false
+D/SurfaceView(17447): windowStopped(false) false dd12693 of ViewRootImpl@7ffa39c[MainActivity]
+D/SurfaceView(17447): onWindowVisibilityChanged(0) true dd12693 of ViewRootImpl@7ffa39c[MainActivity]
+V/Surface (17447): sf_framedrop debug : 0x4f4c, game : false, logging : 0
+D/ViewRootImpl@7ffa39c[MainActivity](17447): Relayout returned: old=[0,0][1080,1920] new=[0,0][1080,1920] result=0x7 surface={valid=true 3130329088} changed=true
+D/mali_winsys(17447): EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, egl_color_buffer_format *, EGLBoolean) returns 0x3000,  [1080x1920]-format:1
+D/OpenGLRenderer(17447): eglCreateWindowSurface = 0xdca8b1e8, 0xba950808
+D/SurfaceView(17447): BG show() Surface(name=Background for - SurfaceView - com.example.obd2_final/com.example.obd2_final.MainActivity@dd12693@1) io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ......ID 0,0-1080,1920}
+V/Surface (17447): sf_framedrop debug : 0x4f4c, game : false, logging : 0
+D/SurfaceView(17447): surfaceCreated 1 #5 io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ......ID 0,0-1080,1920}
+D/mali_winsys(17447): EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, egl_color_buffer_format *, EGLBoolean) returns 0x3000,  [1080x1920]-format:1
+D/SurfaceView(17447): surfaceChanged (1080,1920) 1 #5 io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ......ID 0,0-1080,1920}
+D/ViewRootImpl@7ffa39c[MainActivity](17447): MSG_RESIZED_REPORT: frame=Rect(0, 0 - 1080, 1920) ci=Rect(0, 72 - 0, 0) vi=Rect(0, 72 - 0, 0) or=1
+D/libGLESv2(17447): STS_GLApi : DTS, ODTC are not allowed for Package : com.example.obd2_final
+D/vndksupport(17447): Loading /vendor/lib/hw/android.hardware.graphics.mapper@2.0-impl.so from current namespace instead of sphal namespace.
+E/BpSurfaceComposerClient(17447): Failed to transact (-1)
+D/SurfaceView(17447): BG destroy() Surface(name=Background for - SurfaceView - com.example.obd2_final/com.example.obd2_final.MainActivity@dd12693@0) io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ......ID 0,0-1080,1920}
+E/BpSurfaceComposerClient(17447): Failed to transact (-1)
+D/ViewRootImpl@7ffa39c[MainActivity](17447): MSG_WINDOW_FOCUS_CHANGED 1
+V/InputMethodManager(17447): Starting input: tba=android.view.inputmethod.EditorInfo@ecd1ffc nm : com.example.obd2_final ic=null
+D/InputMethodManager(17447): startInputInner - Id : 0
+I/InputMethodManager(17447): startInputInner - mService.startInputOrWindowGainedFocus
+D/InputTransport(17447): Input channel constructed: fd=90
+V/InputMethodManager(17447): Starting input: tba=android.view.inputmethod.EditorInfo@5fd9685 nm : com.example.obd2_final ic=null
+D/InputMethodManager(17447): startInputInner - Id : 0
+I/flutter (17447): ┌───────────────────────────────────────────────────────────────────────────────────────────────────
+I/flutter (17447): │ #0   AppLogger.d (package:obd2_diagnostics/core/utils/app_logger.dart:22:52)
+I/flutter (17447): ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+I/flutter (17447): │ 🐛 [SyncService] No pending records to sync
+I/flutter (17447): └───────────────────────────────────────────────────────────────────────────────────────────────────
+V/InputMethodManager(17447): Starting input: tba=android.view.inputmethod.EditorInfo@4f77294 nm : com.example.obd2_final ic=null
+D/InputMethodManager(17447): startInputInner - Id : 0
+I/InputMethodManager(17447): startInputInner - mService.startInputOrWindowGainedFocus
+D/InputTransport(17447): Input channel constructed: fd=89
+D/InputTransport(17447): Input channel destroyed: fd=90
+D/SurfaceView(17447): windowStopped(true) false dd12693 of ViewRootImpl@7ffa39c[MainActivity]
+D/SurfaceView(17447): BG show() Surface(name=Background for - SurfaceView - com.example.obd2_final/com.example.obd2_final.MainActivity@dd12693@1) io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ........ 0,0-1080,1920}
+D/SurfaceView(17447): surfaceDestroyed 1 #1 io.flutter.embedding.android.FlutterSurfaceView{dd12693 V.E...... ........ 0,0-1080,1920}
+D/SurfaceView(17447): onWindowVisibilityChanged(8) false dd12693 of ViewRootImpl@7ffa39c[MainActivity]
+D/SurfaceView(17447): BG hide() Surface(name=Background for - SurfaceView - com.example.obd2_final/com.example.obd2_final.MainActivity@dd12693@1) true false io.flutter.embedding.android.FlutterSurfaceView{dd12693 G.E...... ......I. 0,0-1080,1920}
+D/OpenGLRenderer(17447): eglDestroySurface = 0xdca8b1e8, 0xba950800
+D/ViewRootImpl@7ffa39c[MainActivity](17447): Relayout returned: old=[0,0][1080,1920] new=[0,0][1080,1920] result=0x5 surface={valid=false 0} changed=true
+D/ViewRootImpl@7ffa39c[MainActivity](17447): MSG_WINDOW_FOCUS_CHANGED 0
+I/flutter (17447): ┌───────────────────────────────────────────────────────────────────────────────────────────────────
+I/flutter (17447): │ #0   AppLogger.d (package:obd2_diagnostics/core/utils/app_logger.dart:22:52)
+I/flutter (17447): ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+I/flutter (17447): │ 🐛 [SyncService] No pending records to sync
+I/flutter (17447): └───────────────────────────────────────────────────────────────────────────────────────────────────
+I/flutter (17447): ┌───────────────────────────────────────────────────────────────────────────────────────────────────
+I/flutter (17447): │ #0   AppLogger.d (package:obd2_diagnostics/core/utils/app_logger.dart:22:52)
+I/flutter (17447): ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+I/flutter (17447): │ 🐛 [SyncService] No pending records to sync
+I/flutter (17447): └───────────────────────────────────────────────────────────────────────────────────────────────────
+I/flutter (17447): ┌───────────────────────────────────────────────────────────────────────────────────────────────────
+I/flutter (17447): │ #0   AppLogger.d (package:obd2_diagnostics/core/utils/app_logger.dart:22:52)
+I/flutter (17447): ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+I/flutter (17447): │ 🐛 [SyncService] No pending records to sync
+I/flutter (17447): └───────────────────────────────────────────────────────────────────────────────────────────────────
+
+Application finished.

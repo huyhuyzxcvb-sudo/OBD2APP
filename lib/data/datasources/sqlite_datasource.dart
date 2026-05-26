@@ -35,6 +35,20 @@ class SqliteDataSource {
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
       );
+      final version = await _db!.getVersion();
+      AppLogger.i('SQLite current version: $version');
+      try {
+        await _db!.execute(
+          'ALTER TABLE ${AppConstants.tableVehicles} ADD COLUMN name TEXT',
+        );
+        AppLogger.i('Added column name');
+      } catch (_) {}
+      try {
+        await _db!.execute(
+          'ALTER TABLE ${AppConstants.tableVehicles} ADD COLUMN plate TEXT',
+        );
+        AppLogger.i('Added column plate');
+      } catch (_) {}
     } catch (e, st) {
       AppLogger.e('Cannot open SQLite', e, st);
       throw DatabaseException('Cannot open database', originalError: e);
@@ -60,7 +74,9 @@ class SqliteDataSource {
       CREATE TABLE IF NOT EXISTS ${AppConstants.tableVehicles} (
         vin        TEXT PRIMARY KEY,
         first_seen INTEGER NOT NULL,
-        last_seen  INTEGER NOT NULL
+        last_seen  INTEGER NOT NULL,
+        name       TEXT,
+        plate      TEXT
       )
     ''');
     AppLogger.i('Migration v2: vehicles table created');
@@ -70,6 +86,15 @@ class SqliteDataSource {
       'ALTER TABLE ${AppConstants.tableVehicleData} ADD COLUMN is_synced INTEGER DEFAULT 0',
     );
     AppLogger.i('Migration v3: is_synced column added');
+  }
+  if (old < 4) {
+  await db.execute(
+    'ALTER TABLE ${AppConstants.tableVehicles} ADD COLUMN name TEXT',
+  );
+  await db.execute(
+    'ALTER TABLE ${AppConstants.tableVehicles} ADD COLUMN plate TEXT',
+  );
+  AppLogger.i('Migration v4: name + plate columns added');    
   }
 }
   Database get _database {
@@ -242,6 +267,31 @@ Future<int> deleteSyncedOlderThan(int timestampMs) async {
     AppLogger.e('insertRaw failed', e);
   }
 }
+    Future<void> updateVehicleInfo(String vin, String name, String plate) async {
+    AppLogger.d('updateVehicleInfo: vin=$vin name=$name plate=$plate');
+    try {
+      final result = await _database.update(
+        AppConstants.tableVehicles,
+        {'name': name, 'plate': plate},
+        where: 'vin = ?',
+        whereArgs: [vin],
+      );
+      AppLogger.d('updateVehicleInfo: updated $result rows');
+    } catch (e) {
+      AppLogger.e('updateVehicleInfo failed', e);
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>?> getVehicleInfo(String vin) async {
+    final rows = await _database.query(
+      AppConstants.tableVehicles,
+      where: 'vin = ?',
+      whereArgs: [vin],
+      limit: 1,
+    );
+    return rows.isEmpty ? null : rows.first;
+  }
   Future<void> close() async {
     await _db?.close();
     _db = null;

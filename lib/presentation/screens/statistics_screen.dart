@@ -14,6 +14,7 @@ import '../../core/constants/app_constants.dart';
 import '../../core/constants/app_theme.dart';
 import '../../domain/entities/vehicle_data.dart';
 import '../providers/statistics_provider.dart';
+import '../../data/datasources/sqlite_datasource.dart';
 class StatisticsScreen extends ConsumerWidget {
   const StatisticsScreen({super.key});
 
@@ -567,60 +568,187 @@ class _VinSelector extends ConsumerWidget {
                 itemCount:       vins.length,
                 separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (_, i) {
-                  final vin        = vins[i];
-                  final isSelected = vin == selectedVin;
-                  return GestureDetector(
-                    onTap: () => ref
-                        .read(selectedVinProvider.notifier)
-                        .state = isSelected ? null : vin,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppTheme.cyan.withOpacity(0.15)
-                            : AppTheme.cardDark,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: isSelected
-                              ? AppTheme.cyan.withOpacity(0.6)
-                              : AppTheme.borderDark,
-                        ),
-                      ),
-                      child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        Icon(Icons.directions_car,
-                            size: 14,
-                            color: isSelected
-                                ? AppTheme.cyan
-                                : AppTheme.textSecondary),
-                        const SizedBox(width: 6),
-                        Text(
-                          vin.length > 11
-                              ? '${vin.substring(0, 11)}...'
-                              : vin,
-                          style: TextStyle(
-                            color: isSelected
-                                ? AppTheme.cyan
-                                : AppTheme.textSecondary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        if (isSelected) ...[
-                          const SizedBox(width: 4),
-                          Icon(Icons.check_circle,
-                              size: 14, color: AppTheme.cyan),
-                        ],
-                      ]),
-                    ),
-                  );
-                },
-              ),
+              final vin        = vins[i];
+              final isSelected = vin == selectedVin;
+                return _VinItem(
+                  vin: vin,
+                  isSelected: isSelected,
+                  onTap: () => ref
+                      .read(selectedVinProvider.notifier)
+                      .state = isSelected ? null : vin,
+                );
+              }, 
+             ),
             ),
           ],
         );
       },
+    );
+  }
+}  
+class _VinItem extends StatefulWidget {
+  final String vin;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _VinItem({
+    required this.vin,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  State<_VinItem> createState() => _VinItemState();
+}
+class _VinItemState extends State<_VinItem> {
+  String? _displayName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInfo();
+  }
+
+  Future<void> _loadInfo() async {
+    final info =
+        await SqliteDataSource.instance.getVehicleInfo(widget.vin);
+    if (!mounted) return;
+    if (info?['name'] != null && (info!['name'] as String).isNotEmpty) {
+      final plate = info['plate'] as String? ?? '';
+      setState(() {
+        _displayName = plate.isNotEmpty
+            ? '${info['name']} ($plate)'
+            : info['name'] as String;
+      });
+    }
+  }
+
+  void _showEdit(BuildContext context) {
+    final nameCtrl  = TextEditingController();
+    final plateCtrl = TextEditingController();
+
+    SqliteDataSource.instance.getVehicleInfo(widget.vin).then((info) {
+      if (info != null) {
+        nameCtrl.text  = info['name']  as String? ?? '';
+        plateCtrl.text = info['plate'] as String? ?? '';
+      }
+    });
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: AppTheme.cardDark,
+        title: Text('Đặt tên xe',
+            style: TextStyle(color: AppTheme.textPrimary)),
+        content: SingleChildScrollView(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          TextField(
+            controller: nameCtrl,
+            style: TextStyle(color: AppTheme.textPrimary),
+            decoration: InputDecoration(
+              labelText: 'Tên xe',
+              labelStyle: TextStyle(color: AppTheme.textSecondary),
+              hintText: 'Ví dụ: Ford Focus của tôi',
+              hintStyle: TextStyle(color: AppTheme.textDisabled),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: plateCtrl,
+            style: TextStyle(color: AppTheme.textPrimary),
+            decoration: InputDecoration(
+              labelText: 'Biển số xe',
+              labelStyle: TextStyle(color: AppTheme.textSecondary),
+              hintText: 'Ví dụ: 51A-123.45',
+              hintStyle: TextStyle(color: AppTheme.textDisabled),
+            ),
+          ),
+        ]),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Huỷ',
+                style: TextStyle(color: AppTheme.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () async {
+              try {
+                await SqliteDataSource.instance.updateVehicleInfo(
+                  widget.vin,
+                  nameCtrl.text.trim(),
+                  plateCtrl.text.trim(),
+                );
+                if (!mounted) return;
+                Navigator.pop(context);
+                _loadInfo();
+              } catch (e, st) {
+                debugPrint('updateVehicleInfo error: $e');
+                debugPrint('$st');
+              }
+            },
+            child: Text('Lưu',
+                style: TextStyle(color: AppTheme.cyan)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final displayName = _displayName ??
+        (widget.vin.length > 11
+            ? '${widget.vin.substring(0, 11)}...'
+            : widget.vin);
+
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: widget.isSelected
+              ? AppTheme.cyan.withOpacity(0.15)
+              : AppTheme.cardDark,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: widget.isSelected
+                ? AppTheme.cyan.withOpacity(0.6)
+                : AppTheme.borderDark,
+          ),
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          Icon(Icons.directions_car,
+              size: 14,
+              color: widget.isSelected
+                  ? AppTheme.cyan
+                  : AppTheme.textSecondary),
+          const SizedBox(width: 6),
+          Text(displayName,
+              style: TextStyle(
+                color: widget.isSelected
+                    ? AppTheme.cyan
+                    : AppTheme.textSecondary,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              )),
+          if (widget.isSelected) ...[
+            const SizedBox(width: 4),
+            Icon(Icons.check_circle, size: 14, color: AppTheme.cyan),
+          ],
+          const SizedBox(width: 4),
+          InkWell(
+            onTap: () => _showEdit(context),
+            borderRadius: BorderRadius.circular(4),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Icon(Icons.edit, size: 14, color: AppTheme.cyan),
+            ),
+          ),
+        ]),
+      ),
     );
   }
 }

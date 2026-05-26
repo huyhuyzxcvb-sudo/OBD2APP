@@ -65,7 +65,7 @@ class AppConstants {
 
   // ── SQLite ───────────────────────────────────────────────
   static const String dbName              = 'obd2_data.db';
-  static const int    dbVersion           = 3;
+  static const int    dbVersion           = 4;
   static const String tableVehicleData    = 'vehicle_data';
   static const String tableVehicles = 'vehicles';
 }
