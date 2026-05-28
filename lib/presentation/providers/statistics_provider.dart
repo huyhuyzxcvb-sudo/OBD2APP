@@ -49,6 +49,10 @@ final historyStatsProvider =
   final from        = period == StatsPeriod.day
       ? now.subtract(const Duration(hours: 24))
       : now.subtract(const Duration(days: 7));
+      debugPrint('Query from: $from');
+      debugPrint('Query to: $now');
+      debugPrint('Query fromMs: ${from.millisecondsSinceEpoch}');
+      debugPrint('Query toMs: ${now.millisecondsSinceEpoch}');
     List<VehicleData> result;
   if (selectedVin == null) {
     result = await repo.getByPeriod(period);

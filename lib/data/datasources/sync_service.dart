@@ -160,13 +160,13 @@ Future<void> pullFromCloud(String vin) async {
     }
 
     AppLogger.i('[$_tag] Pulling data from Supabase for VIN: $vin');
-
     final records = await _supabase
         .from(SupabaseConstants.tableObd)
         .select()
         .eq('vin', vin)
-        .order('timestamp', ascending: true);
-
+        .order('timestamp', ascending: true)
+        .limit(10000);
+      AppLogger.i('[$_tag] Got ${records.length} records from Supabase');
     if (records.isEmpty) {
       AppLogger.i('[$_tag] No records found on cloud for VIN: $vin');
       return;
