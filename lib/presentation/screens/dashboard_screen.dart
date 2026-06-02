@@ -12,6 +12,7 @@ import '../providers/obd_controller_provider.dart';
 import '../widgets/arc_gauge.dart';
 import '../widgets/connection_bar.dart';
 import '../widgets/metric_card.dart';
+import '../widgets/warning_overlay_widget.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -39,7 +40,7 @@ class DashboardScreen extends ConsumerWidget {
             snap:    true,
             title: Row(
               children: [
-                Text('DASHBOARD',
+                const Text('DASHBOARD',
                     style: TextStyle(
                         color: AppTheme.textPrimary, fontSize: 20,
                         fontWeight: FontWeight.w800, letterSpacing: 2)),
@@ -54,6 +55,7 @@ class DashboardScreen extends ConsumerWidget {
               children: [
                 // ── Connection bar ────────────────────────
                 const ConnectionBar(),
+                const WarningOverlayWidget(),
                 const SizedBox(height: 20),
 
                 // ── RPM + Speed gauges ────────────────────
@@ -194,13 +196,13 @@ class _ThrottleBar extends StatelessWidget {
             children: [
               const Icon(Icons.tune, color: AppTheme.orange, size: 16),
               const SizedBox(width: 8),
-              Text('VỊ TRÍ BƯỚM GA',
+              const Text('VỊ TRÍ BƯỚM GA',
                   style: TextStyle(
                       color: AppTheme.textSecondary, fontSize: 12,
                       letterSpacing: 1.5)),
               const Spacer(),
               Text('${throttle.toStringAsFixed(1)}%',
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: AppTheme.orange, fontSize: 20,
                       fontWeight: FontWeight.w700)),
             ],
@@ -255,7 +257,7 @@ class _PeaksCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('SESSION PEAKS',
+          const Text('SESSION PEAKS',
               style: TextStyle(
                   color: AppTheme.textSecondary, fontSize: 11,
                   letterSpacing: 2)),
@@ -281,7 +283,7 @@ class _Peak extends StatelessWidget {
   Widget build(BuildContext context) => Expanded(child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(label, style: TextStyle(
+      Text(label, style: const TextStyle(
           color: AppTheme.textSecondary, fontSize: 11)),
       Text('$value $unit', style: TextStyle(
           color: color, fontSize: 14, fontWeight: FontWeight.w600)),
@@ -318,7 +320,7 @@ class _LiveBadgeState extends State<_LiveBadge>
                 color: AppTheme.green.withOpacity(0.5 + _c.value * 0.5),
               )),
           const SizedBox(width: 4),
-          Text('LIVE', style: TextStyle(
+          const Text('LIVE', style: TextStyle(
               color: AppTheme.green, fontSize: 11,
               fontWeight: FontWeight.w700, letterSpacing: 1.5)),
         ]),

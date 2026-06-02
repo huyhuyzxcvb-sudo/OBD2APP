@@ -21,11 +21,8 @@ class StatisticsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final period    = ref.watch(statsPeriodProvider);
-    final obdState  = ref.watch(obdProvider);
     final cntAsync  = ref.watch(dbCountProvider);
-    final dataAsync = obdState.isConnected
-      ? ref.watch(realtimeStatsProvider)
-      : ref.watch(historyStatsProvider);
+    final dataAsync = ref.watch(historyStatsProvider);
     return Scaffold(
       backgroundColor: AppTheme.bgDark,
       body: CustomScrollView(
@@ -35,7 +32,7 @@ class StatisticsScreen extends ConsumerWidget {
           SliverAppBar(
             backgroundColor: AppTheme.surfaceDark,
             floating: true, snap: true,
-            title: Text('THỐNG KÊ',
+            title: const Text('THỐNG KÊ',
                 style: TextStyle(
                     color: AppTheme.textPrimary, fontSize: 20,
                     fontWeight: FontWeight.w800, letterSpacing: 2)),
@@ -47,7 +44,7 @@ class StatisticsScreen extends ConsumerWidget {
                     backgroundColor: AppTheme.cardDark,
                     side: const BorderSide(color: AppTheme.borderDark),
                     label: Text('$n bản ghi',
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: AppTheme.textSecondary, fontSize: 12)),
                     padding: EdgeInsets.zero,
                   ),
@@ -63,9 +60,9 @@ class StatisticsScreen extends ConsumerWidget {
               children: [
                 const SizedBox(height: 16),
                 // ── VIN selector ──────────────────────────
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: const _VinSelector(),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: _VinSelector(),
                 ),
                 const SizedBox(height: 12),
 
@@ -297,14 +294,14 @@ static List<List<FlSpot>> _splitIntoSegments(
     for (int i = 1; i < spots.length; i++) {
       final gapMs = spots[i].x - spots[i - 1].x;
       if (gapMs > gapMinutes * 60 * 1000) {
-        if (current.length >= 1) segments.add(current);
+        if (current.isNotEmpty) segments.add(current);
         current = [spots[i]];
       } else {
         current.add(spots[i]);
       }
     }
 
-    if (current.length >= 1) segments.add(current);
+    if (current.isNotEmpty) segments.add(current);
     return segments;
   }
 }
@@ -343,7 +340,7 @@ class _ChartCard extends StatelessWidget {
           border: Border.all(color: AppTheme.borderDark),
         ),
         child: Center(child: Text('Không có dữ liệu $title',
-            style: TextStyle(color: AppTheme.textSecondary))),
+            style: const TextStyle(color: AppTheme.textSecondary))),
       );
     }
 
@@ -405,7 +402,7 @@ class _ChartCard extends StatelessWidget {
                       interval: (maxY - minY) / 4,
                       getTitlesWidget: (v, _) => Text(
                         v.toStringAsFixed(0),
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: AppTheme.textDisabled, fontSize: 10),
                       ),
                     ),
@@ -424,7 +421,7 @@ class _ChartCard extends StatelessWidget {
                              ? DateFormat('HH:mm')
                              : DateFormat('dd/MM');
                         return Text(fmt.format(dt),
-                             style: TextStyle(
+                             style: const TextStyle(
                              color: AppTheme.textDisabled, fontSize: 9));
                     },
                     ),
@@ -481,25 +478,34 @@ class _ChartCard extends StatelessWidget {
 double _xInterval(List<FlSpot> allSpots) {
   if (allSpots.length < 2) return 1;
 
-  // Sort để đảm bảo first/last đúng
   final sorted = [...allSpots]..sort((a, b) => a.x.compareTo(b.x));
   final range  = sorted.last.x - sorted.first.x;
   if (range <= 0) return 60000;
 
-  const ms = 60 * 1000.0; // 1 phút tính bằng ms
+  const ms  = 60 * 1000.0;        // 1 phút
+  const h   = 60 * ms;            // 1 giờ
+  const day = 24 * h;             // 1 ngày
 
-  // Tối đa 4 nhãn để tránh chồng
-  final interval = range / 4;
+  // Tối đa 6 nhãn để vừa màn hình
+  final interval = range / 6;
 
-  // Làm tròn lên mốc đẹp gần nhất
+  // Dưới 2 giờ → chia theo phút
   if (interval <=  5 * ms) return  5 * ms;
   if (interval <= 10 * ms) return 10 * ms;
   if (interval <= 15 * ms) return 15 * ms;
   if (interval <= 30 * ms) return 30 * ms;
-  if (interval <= 60 * ms) return 60 * ms;        // 1 giờ
-  if (interval <= 120 * ms) return 120 * ms;      // 2 giờ
-  if (interval <= 360 * ms) return 360 * ms;      // 6 giờ
-  return 720 * ms;                                // 12 giờ
+
+  // 2h - 24h → chia theo giờ
+  if (interval <=  1 * h)  return  1 * h;   // mỗi 1 giờ
+  if (interval <=  2 * h)  return  2 * h;   // mỗi 2 giờ
+  if (interval <=  3 * h)  return  3 * h;   // mỗi 3 giờ
+  if (interval <=  4 * h)  return  4 * h;   // mỗi 4 giờ
+  if (interval <=  6 * h)  return  6 * h;   // mỗi 6 giờ
+
+  // Trên 24h → chia theo ngày
+  if (interval <=  1 * day) return  1 * day; // mỗi 1 ngày
+  if (interval <=  2 * day) return  2 * day; // mỗi 2 ngày
+  return 3 * day;
 }
 }
 
@@ -511,7 +517,7 @@ class _Stat extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(label, style: TextStyle(
+      Text(label, style: const TextStyle(
           color: AppTheme.textDisabled, fontSize: 10, letterSpacing: 1)),
       Text('$value $unit', style: TextStyle(
           color: color, fontSize: 13, fontWeight: FontWeight.w700)),
@@ -521,16 +527,16 @@ class _Stat extends StatelessWidget {
 
 class _EmptyState extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(60),
+  Widget build(BuildContext context) => const Padding(
+    padding: EdgeInsets.all(60),
     child: Column(children: [
-      const Icon(Icons.bar_chart_outlined,
+      Icon(Icons.bar_chart_outlined,
           color: AppTheme.textDisabled, size: 60),
-      const SizedBox(height: 16),
+      SizedBox(height: 16),
       Text('Chưa có dữ liệu thống kê',
           style: TextStyle(
               color: AppTheme.textSecondary, fontSize: 16)),
-      const SizedBox(height: 8),
+      SizedBox(height: 8),
       Text('Kết nối xe và để app chạy để thu thập dữ liệu',
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -556,7 +562,7 @@ class _VinSelector extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('CHỌN XE',
+            const Text('CHỌN XE',
                 style: TextStyle(
                     color: AppTheme.textSecondary,
                     fontSize: 11, letterSpacing: 2)),
@@ -638,14 +644,14 @@ class _VinItemState extends State<_VinItem> {
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: AppTheme.cardDark,
-        title: Text('Đặt tên xe',
+        title: const Text('Đặt tên xe',
             style: TextStyle(color: AppTheme.textPrimary)),
         content: SingleChildScrollView(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           TextField(
             controller: nameCtrl,
-            style: TextStyle(color: AppTheme.textPrimary),
-            decoration: InputDecoration(
+            style: const TextStyle(color: AppTheme.textPrimary),
+            decoration: const InputDecoration(
               labelText: 'Tên xe',
               labelStyle: TextStyle(color: AppTheme.textSecondary),
               hintText: 'Ví dụ: Ford Focus của tôi',
@@ -655,8 +661,8 @@ class _VinItemState extends State<_VinItem> {
           const SizedBox(height: 12),
           TextField(
             controller: plateCtrl,
-            style: TextStyle(color: AppTheme.textPrimary),
-            decoration: InputDecoration(
+            style: const TextStyle(color: AppTheme.textPrimary),
+            decoration: const InputDecoration(
               labelText: 'Biển số xe',
               labelStyle: TextStyle(color: AppTheme.textSecondary),
               hintText: 'Ví dụ: 51A-123.45',
@@ -668,7 +674,7 @@ class _VinItemState extends State<_VinItem> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Huỷ',
+            child: const Text('Huỷ',
                 style: TextStyle(color: AppTheme.textSecondary)),
           ),
           TextButton(
@@ -687,7 +693,7 @@ class _VinItemState extends State<_VinItem> {
                 debugPrint('$st');
               }
             },
-            child: Text('Lưu',
+            child: const Text('Lưu',
                 style: TextStyle(color: AppTheme.cyan)),
           ),
         ],
@@ -736,14 +742,14 @@ class _VinItemState extends State<_VinItem> {
               )),
           if (widget.isSelected) ...[
             const SizedBox(width: 4),
-            Icon(Icons.check_circle, size: 14, color: AppTheme.cyan),
+            const Icon(Icons.check_circle, size: 14, color: AppTheme.cyan),
           ],
           const SizedBox(width: 4),
           InkWell(
             onTap: () => _showEdit(context),
             borderRadius: BorderRadius.circular(4),
-            child: Padding(
-              padding: const EdgeInsets.all(4),
+            child: const Padding(
+              padding: EdgeInsets.all(4),
               child: Icon(Icons.edit, size: 14, color: AppTheme.cyan),
             ),
           ),
