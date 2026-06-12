@@ -6,10 +6,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:intl/intl.dart';
-import 'package:obd2_diagnostics/presentation/providers/obd_controller_provider.dart';
-
 import '../../core/constants/app_constants.dart';
 import '../../core/constants/app_theme.dart';
 import '../../domain/entities/vehicle_data.dart';
@@ -17,7 +14,6 @@ import '../providers/statistics_provider.dart';
 import '../../data/datasources/sqlite_datasource.dart';
 class StatisticsScreen extends ConsumerWidget {
   const StatisticsScreen({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final period    = ref.watch(statsPeriodProvider);
@@ -44,7 +40,7 @@ class StatisticsScreen extends ConsumerWidget {
                     backgroundColor: AppTheme.cardDark,
                     side: const BorderSide(color: AppTheme.borderDark),
                     label: Text('$n bản ghi',
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: AppTheme.textSecondary, fontSize: 12)),
                     padding: EdgeInsets.zero,
                   ),
@@ -348,7 +344,7 @@ class _ChartCard extends StatelessWidget {
     final avg  = ys.reduce((a, b) => a + b) / ys.length;
     final vmax = ys.reduce((a, b) => a > b ? a : b);
     final vmin = ys.reduce((a, b) => a < b ? a : b);
-    final xInterval = _xInterval(spots);
+    final xInterval = _xInterval(spots,period);
     final segments = _AllCharts._splitIntoSegments(spots, gapMinutes: gapMinutes); 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -475,18 +471,18 @@ class _ChartCard extends StatelessWidget {
     );
   }
 
-double _xInterval(List<FlSpot> allSpots) {
+double _xInterval(List<FlSpot> allSpots, StatsPeriod period) {
   if (allSpots.length < 2) return 1;
 
   final sorted = [...allSpots]..sort((a, b) => a.x.compareTo(b.x));
   final range  = sorted.last.x - sorted.first.x;
   if (range <= 0) return 60000;
 
-  const ms  = 60 * 1000.0;        // 1 phút
-  const h   = 60 * ms;            // 1 giờ
-  const day = 24 * h;             // 1 ngày
+  const ms  = 60 * 1000.0;
+  const h   = 60 * ms;
+  const day = 24 * h;
 
-  // Tối đa 6 nhãn để vừa màn hình
+  // Luôn dùng range thực tế — chỉ hiển thị khoảng có dữ liệu
   final interval = range / 6;
 
   // Dưới 2 giờ → chia theo phút
@@ -496,15 +492,15 @@ double _xInterval(List<FlSpot> allSpots) {
   if (interval <= 30 * ms) return 30 * ms;
 
   // 2h - 24h → chia theo giờ
-  if (interval <=  1 * h)  return  1 * h;   // mỗi 1 giờ
-  if (interval <=  2 * h)  return  2 * h;   // mỗi 2 giờ
-  if (interval <=  3 * h)  return  3 * h;   // mỗi 3 giờ
-  if (interval <=  4 * h)  return  4 * h;   // mỗi 4 giờ
-  if (interval <=  6 * h)  return  6 * h;   // mỗi 6 giờ
+  if (interval <=  1 * h)  return  1 * h;
+  if (interval <=  2 * h)  return  2 * h;
+  if (interval <=  3 * h)  return  3 * h;
+  if (interval <=  4 * h)  return  4 * h;
+  if (interval <=  6 * h)  return  6 * h;
 
   // Trên 24h → chia theo ngày
-  if (interval <=  1 * day) return  1 * day; // mỗi 1 ngày
-  if (interval <=  2 * day) return  2 * day; // mỗi 2 ngày
+  if (interval <= 1 * day) return 1 * day;
+  if (interval <= 2 * day) return 2 * day;
   return 3 * day;
 }
 }
@@ -700,6 +696,38 @@ class _VinItemState extends State<_VinItem> {
       ),
     );
   }
+   void _showDeleteDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: AppTheme.cardDark,
+        title: Text('Xóa xe',
+            style: TextStyle(color: AppTheme.textPrimary)),
+        content: Text(
+          'Bạn có chắc muốn xóa xe "${_displayName ?? widget.vin}" không?\nToàn bộ dữ liệu lịch sử của xe này cũng sẽ bị xóa.',
+          style: TextStyle(color: AppTheme.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Huỷ',
+                style: TextStyle(color: AppTheme.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () async {
+              await SqliteDataSource.instance.deleteVehicle(widget.vin);
+              if (!mounted) return Navigator.pop(context);
+              ProviderScope.containerOf(context)
+                  .invalidate(allVinsProvider);
+                  Navigator.pop(context);
+            },
+            child: Text('Xóa',
+                style: TextStyle(color: AppTheme.red)),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -710,6 +738,7 @@ class _VinItemState extends State<_VinItem> {
 
     return GestureDetector(
       onTap: widget.onTap,
+       onLongPress: () => _showDeleteDialog(context),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding:

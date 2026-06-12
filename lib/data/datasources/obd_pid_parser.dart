@@ -132,6 +132,10 @@ class ObdPidParser {
 
     final cleaned = rawResponse
         .replaceAll(RegExp(r'[\r\n>]'), ' ')
+        // Xóa số thứ tự frame multiframe: "0:", "1:", "2:"
+        .replaceAll(RegExp(r'\b[0-9A-F]:\s*'), ' ')
+        // Xóa độ dài frame ở đầu dòng: "014", "10D"...
+        .replaceAll(RegExp(r'^\s*[0-9A-F]{3}\s*'), ' ')
         .replaceAll(RegExp(r'\s+'), ' ')
         .trim()
         .toUpperCase();

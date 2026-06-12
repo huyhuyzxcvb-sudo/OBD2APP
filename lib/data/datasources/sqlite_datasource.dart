@@ -292,6 +292,19 @@ Future<int> deleteSyncedOlderThan(int timestampMs) async {
     );
     return rows.isEmpty ? null : rows.first;
   }
+  Future<void> deleteVehicle(String vin) async {
+  await _database.delete(
+    AppConstants.tableVehicles,
+    where: 'vin = ?',
+    whereArgs: [vin],
+  );
+  // Xóa luôn dữ liệu xe trong vehicle_data
+  await _database.delete(
+    AppConstants.tableVehicleData,
+    where: 'vin = ?',
+    whereArgs: [vin],
+  );
+}
   Future<void> close() async {
     await _db?.close();
     _db = null;

@@ -77,11 +77,11 @@ class OverheatRule extends WarningRule {
  
 class HighEngineLoadRule extends WarningRule {
   @override String get id          => 'high_load';
-  @override String get displayName => 'Tai dong co cao';
+  @override String get displayName => 'Tải động cơ cao';
  
-  static const double _tpsThreshold   = 15.0;
-  static const double _rpmThreshold   = 2000.0;
-  static const double _speedThreshold = 90.0;
+  static const double _tpsThreshold   = 70.0;
+  static const double _rpmThreshold   = 3500.0;
+  static const double _speedThreshold = 40.0;
  
   @override
   WarningResult? evaluate(List<VehicleData> buffer) {
